@@ -2,7 +2,7 @@
 
 Основные api:
 - user (get, create)
-- ship
+- ship.list
 Получить список всех кораблей возможных для установки на поле ship.getList
 - coordinates
 coordinates.add - установка координат для корабля
