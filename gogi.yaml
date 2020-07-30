@@ -1,0 +1,11 @@
+project: testapp-battleship
+services:
+  testapp-battleship:
+    generate:
+      goswagger:
+        - type: server
+          nullable: strict
+          name: battleship
+          spec: "swagger/api.yaml"
+          target: "app/generated/"
+          logging: true

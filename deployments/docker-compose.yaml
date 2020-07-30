@@ -1,0 +1,60 @@
+version: "3.7"
+services:
+  battleship-dev:
+    container_name: battleship-dev
+    build:
+      context: ../
+      target: build
+    env_file:
+      - default.env
+      - local.env
+    ports:
+      - 8000:8080
+    depends_on:
+      - battleship-db
+    volumes:
+      - "..:/app/"
+    working_dir: "/app"
+    command: >
+      sh -c "make bindata
+      && go run main.go"
+  battleship-db:
+    container_name: battleship-db
+    image: postgres:10
+    environment:
+      - POSTGRES_DB=battleship
+      - POSTGRES_USER=battleship
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 6543:5432
+  battleship-goose-migrate:
+    container_name: battleship-goose-migrate
+    image: aybabtme/goose:latest
+    depends_on:
+      - battleship-db
+      - battleship-db-wait
+    volumes:
+      - "../migrations-goose:/migrations-goose"
+    command: ["-dir", "/migrations-goose/", "postgres", "host=battleship-db user=battleship dbname=battleship sslmode=disable", "up"]
+  battleship-db-wait:
+    image: base.docker.lamoda.ru/utils/waitport
+    environment:
+      - WAIT_PORT=5432
+      - WAIT_TIMEOUT=120
+      - WAIT_HOST=battleship-db
+    depends_on:
+      - battleship-db
+
+  battleship-test:
+    container_name: battleship-test
+    hostname: battleship-test
+    depends_on:
+      - battleship-db
+      - battleship-migrate
+    env_file:
+      - compose.test.env
+    volumes:
+      - "..:/app/"
+    working_dir: "/app"
+    command: "make test"

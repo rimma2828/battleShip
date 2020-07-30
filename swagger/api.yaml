@@ -1,0 +1,476 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server BattleShip server."
+  version: "1.0.0"
+  title: "Swagger BattleShip"
+  termsOfService: "http://swagger.io/terms/"
+host: "localhost"
+basePath: "/v1"
+tags:
+- name: "ship"
+  description: "BattleShip"
+schemes:
+- "http"
+paths:
+  /user.get:
+    post:
+      tags:
+        - "user"
+      description: "userGet"
+      operationId: user.get.go
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            required:
+              - jsonrpc
+              - id
+              - method
+              - params
+            properties:
+              jsonrpc:
+                type: string
+                example: '2.0'
+                x-nullable: false
+              id:
+                type: string
+                example: '550e8400-e29b-41d4-a716-446655440000'
+                x-nullable: false
+              method:
+                type: string
+                x-nullable: false
+              params:
+                $ref: "#/definitions/UserGetParams"
+      responses:
+        200:
+          description: User Info
+          schema:
+            allOf:
+              - $ref: "#/definitions/BaseResponse"
+              - type: object
+                properties:
+                  result:
+                    $ref: '#/definitions/UserGetResponse'
+  /user.create:
+    post:
+      tags:
+        - "user"
+      description: Create user
+      operationId: user.create
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            required:
+              - jsonrpc
+              - id
+              - method
+              - params
+            properties:
+              jsonrpc:
+                type: string
+                example: '2.0'
+                x-nullable: false
+              id:
+                type: string
+                example: '550e8400-e29b-41d4-a716-446655440000'
+                x-nullable: false
+              method:
+                type: string
+                example: 'user.create'
+                x-nullable: false
+              params:
+                $ref: "#/definitions/UserCreateParams"
+      responses:
+        200:
+          description: Returns created user
+          schema:
+            allOf:
+              - $ref: "#/definitions/BaseResponse"
+              - type: object
+                properties:
+                  result:
+                    $ref: '#/definitions/UserResponse'
+  /ship.list:
+    post:
+      tags:
+        - "ship"
+      description: "shipList"
+      operationId: ship.list.go
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            required:
+              - jsonrpc
+              - id
+              - method
+              - params
+            properties:
+              jsonrpc:
+                type: string
+                example: '2.0'
+                x-nullable: false
+              id:
+                type: string
+                example: '550e8400-e29b-41d4-a716-446655440000'
+                x-nullable: false
+              method:
+                type: string
+                x-nullable: false
+              params:
+                $ref: "#/definitions/ShipListParams"
+      responses:
+        200:
+          description: Ship Storage Info
+          schema:
+            allOf:
+              - $ref: "#/definitions/BaseResponse"
+              - type: object
+                properties:
+                  result:
+                    $ref: '#/definitions/ShipResponse'
+  /coordinates.add:
+    post:
+      tags:
+        - "coordinates"
+      description: User add coordinates to his ship
+      operationId: coordinates.add
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            required:
+              - jsonrpc
+              - id
+              - method
+              - params
+            properties:
+              jsonrpc:
+                type: string
+                example: '2.0'
+                x-nullable: false
+              id:
+                type: string
+                example: '550e8400-e29b-41d4-a716-446655440000'
+                x-nullable: false
+              method:
+                type: string
+                example: 'coordinates.add'
+                x-nullable: false
+              params:
+                $ref: "#/definitions/CoordinatesAddParams"
+      responses:
+        200:
+          description: Returns status
+          schema:
+            allOf:
+              - $ref: "#/definitions/BaseResponse"
+              - type: object
+                properties:
+                  result:
+                    $ref: '#/definitions/CoordinatesActResponse'
+  /fight.act:
+    post:
+      tags:
+        - "fight"
+      description: User fight enemy's ship
+      operationId: fight.add
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            required:
+              - jsonrpc
+              - id
+              - method
+              - params
+            properties:
+              jsonrpc:
+                type: string
+                example: '2.0'
+                x-nullable: false
+              id:
+                type: string
+                example: '550e8400-e29b-41d4-a716-446655440000'
+                x-nullable: false
+              method:
+                type: string
+                example: 'fight.add'
+                x-nullable: false
+              params:
+                $ref: "#/definitions/FightActParams"
+      responses:
+        200:
+          description: Returns status
+          schema:
+            allOf:
+              - $ref: "#/definitions/BaseResponse"
+              - type: object
+                properties:
+                  result:
+                    $ref: '#/definitions/FightActResponse'
+  /game.reset:
+    post:
+      tags:
+        - "game"
+      description: Start new game
+      operationId: game.reset
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            required:
+              - jsonrpc
+              - id
+              - method
+              - params
+            properties:
+              jsonrpc:
+                type: string
+                example: '2.0'
+                x-nullable: false
+              id:
+                type: string
+                example: '550e8400-e29b-41d4-a716-446655440000'
+                x-nullable: false
+              method:
+                type: string
+                example: 'game.reset'
+                x-nullable: false
+      responses:
+        200:
+          description: Returns status
+          schema:
+            allOf:
+              - $ref: "#/definitions/BaseResponse"
+              - type: object
+                properties:
+                  result:
+                    $ref: '#/definitions/GameResetResponse'
+definitions:
+  BaseResponse:
+    type: object
+    required:
+      - jsonrpc
+      - id
+    properties:
+      jsonrpc:
+        type: string
+      id:
+        type: string
+      error:
+        $ref: '#/definitions/Error'
+  Error:
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        description: |
+          Common error codes:<br />
+          -32700 - Parse error<br />
+          -32600 - Invalid Request<br />
+          -32601 - Method not found<br />
+          -32602 - Invalid params<br />
+          -32603 - Internal error<br />
+          -32000 - Server error<br />
+          -1 - Undefined error<br />
+          0 to 30000 - Business logic error<br />
+        x-nullable: false
+      message:
+        type: string
+        description: Human readable error description for debug usage
+        x-nullable: false
+      data:
+        type: object
+        description: Arbitary additional error-related data
+  UserGetParams:
+    type: object
+    required:
+      - id
+    x-nullable: false
+    properties:
+      id:
+        type: integer
+        x-nullable: false
+      userName:
+        type: string
+        x-nullable: false
+  UserGetResponse:
+    type: object
+    required:
+      - id
+      - userName
+    x-nullable: false
+    properties:
+      id:
+        type: integer
+        x-nullable: false
+      userName:
+        type: string
+        x-nullable: false
+  UserCreateParams:
+    type: object
+    required:
+      - userName
+    x-nullable: false
+    properties:
+      userName:
+        type: string
+        x-nullable: false
+  UserCreateResponse:
+    type: object
+    required:
+      - userName
+    x-nullable: false
+    properties:
+      id:
+        type: integer
+        x-nullable: false
+      userName:
+        type: string
+        x-nullable: false
+  UserResponse:
+    type: object
+    required:
+      - userName
+    x-nullable: false
+    properties:
+      id:
+        type: integer
+        x-nullable: false
+      userName:
+        type: string
+        x-nullable: false
+  ShipResponse:
+    type: object
+    required:
+      - id
+      - length
+      - count
+    x-nullable: false
+    properties:
+      id:
+        type: integer
+        x-nullable: false
+      length:
+        type: integer
+        x-nullable: false
+      count:
+        type: integer
+        x-nullable: false
+  ShipListParams:
+    type: object
+    properties:
+      id:
+        type: integer
+        x-nullable: false
+      length:
+        type: integer
+        x-nullable: false
+      count:
+        type: integer
+        x-nullable: false
+  CoordinatesAddParams:
+    type: object
+    required:
+      - userId
+      - shipId
+      - xCoord
+      - yCoord
+    x-nullable: false
+    properties:
+      userId:
+        type: integer
+        x-nullable: false
+      shipId:
+        type: integer
+        x-nullable: false
+      xCoord:
+        type: integer
+        x-nullable: false
+        minimum: 1
+        maximum: 10
+      yCoord:
+        type: integer
+        x-nullable: false
+        minimum: 1
+        maximum: 10
+  CoordinatesActResponse:
+    type: object
+    required:
+      - status
+    x-nullable: false
+    properties:
+      status:
+        type: boolean
+        x-nullable: false
+      shipStatus:
+        type: string
+        x-nullable: false
+  CoordinatesResponse:
+    type: object
+    required:
+      - status
+    x-nullable: false
+    properties:
+      status:
+        type: boolean
+        x-nullable: false
+  FightActParams:
+    type: object
+    required:
+      - userId
+      - xCoord
+      - yCoord
+    x-nullable: false
+    properties:
+      userId:
+        type: integer
+        x-nullable: false
+      shipId:
+        type: integer
+        x-nullable: false
+      xCoord:
+        type: integer
+        x-nullable: false
+        minimum: 1
+        maximum: 10
+      yCoord:
+        type: integer
+        x-nullable: false
+        minimum: 1
+        maximum: 10
+  FightActResponse:
+    type: object
+    required:
+      - status
+    x-nullable: false
+    properties:
+      status:
+        type: string
+        x-nullable: false
+  GameResetResponse:
+    type: object
+    required:
+      - status
+    x-nullable: false
+    properties:
+      status:
+        type: string
+        x-nullable: false
+

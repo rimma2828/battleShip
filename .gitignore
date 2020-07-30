@@ -1,0 +1,7 @@
+.idea/
+vendor
+output
+.DS_Store
+allure-report/
+allure-results/
+coverage.*
